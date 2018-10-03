@@ -27,7 +27,7 @@ class TestUpdateFunctions(unittest.TestCase):
     def test_update_course_name(self):
         db = get_db()
         # Valid input
-        update_functions.update_course_name(db, "update course alpha", 1)
+        update_course_name(db, "update course alpha", 1)
         cur = db.cursor()
         try:
             cur.execute("SELECT c_name FROM course WHERE c_id=1")
@@ -39,31 +39,27 @@ class TestUpdateFunctions(unittest.TestCase):
         self.assertEqual("update course alpha", name)
 
         # Update name to existing name (name must be unique)
-        with self.assertRaises(IntegrityError) as context:
-            update_functions.update_course_name(db, "course charlie", 2)
-        self.assertTrue('Duplicate entry' in str(context.exception))
+        self.assertEqual(update_course_name(db, "course charlie", 2),
+                         DUPLICATE_VALUE_EXCEPTION)
 
         # Update name to invalid value
-        with self.assertRaises(DataError) as context:
-            update_functions.update_course_name(db, "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", 4)
-        self.assertTrue('Data too long for column' in str(context.exception))
+        self.assertEqual(update_course_name(db, "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", 4),
+                         INPUT_TOO_LONG_EXCEPTION)
 
         # Update name with non-existing id
-        with self.assertRaises(Error) as context:
-            update_functions.update_course_name(db, "course id out of bound", 999)
-        self.assertTrue('No row found by id' in str(context.exception))
+        self.assertEqual(update_course_name(db, "course id out of bound", 999),
+                         NO_UPDATE_EXCEPTION)
 
         # Update name to empty value
-        with self.assertRaises(TypeError) as context:
-            update_functions.update_course_name(db, None, 2)
-        self.assertTrue('The inputs can not contain an empty value' in str(context.exception))
+        self.assertEqual(update_course_name(db, None, 2),
+                         EMPTY_INPUT_EXCEPTION)
 
         # Update name with empty id
-        with self.assertRaises(TypeError) as context:
-            update_functions.update_course_name(db, "valid input", None)
-        self.assertTrue('The inputs can not contain an empty value' in str(context.exception))
+        self.assertEqual(update_course_name(db, "valid input", None),
+                         EMPTY_INPUT_EXCEPTION)
 
         db.close()
+
 
     def test_update_course_price(self):
         db = get_db()
