@@ -45,49 +45,69 @@ def update_course_name(db, c_name, c_id):
 
 def update_course_price(db, price, c_id):
     cur = db.cursor()
-    if price == None or c_id == None:
-        raise TypeError('The inputs can not contain an empty value')
-    cur.execute(update_queries["update_course_price"].replace("{price}", str(price)).replace("{c_id}", str(c_id)))
-    db.commit()
-    if cur.rowcount == 0:
-        # An update went by without changing any values
-        raise Error('No row found by id')
-    cur.close()
+    try :
+        if price == None or c_id == None:
+            return EMPTY_INPUT_EXCEPTION
+        cur.execute(update_queries["update_course_price"].replace("{price}", str(price)).replace("{c_id}", str(c_id)))
+        db.commit()
+        if cur.rowcount == 0:
+            return NO_UPDATE_EXCEPTION
+    except (Error) as err:
+        if 'Incorrect decimal value' in str(err):
+            return INVALID_DECIMAL_VALUE
+        raise err
+    finally:
+        cur.close()
 
 
 def update_ingredient_name(db, i_name, i_id):
     cur = db.cursor()
-    if i_name == None or i_id == None:
-        raise TypeError('The inputs can not contain an empty value')
-    cur.execute(update_queries["update_ingredient_name"].replace("{i_name}", i_name).replace("{i_id}", str(i_id)))
-    db.commit()
-    if cur.rowcount == 0:
-        # An update went by without changing any values
-        raise Error('No row found by id')
-    cur.close()
+    try:
+        if i_name == None or i_id == None:
+            return EMPTY_INPUT_EXCEPTION
+        cur.execute(update_queries["update_ingredient_name"].replace("{i_name}", i_name).replace("{i_id}", str(i_id)))
+        db.commit()
+        if cur.rowcount == 0:
+            return NO_UPDATE_EXCEPTION
+    except (IntegrityError):
+        return DUPLICATE_VALUE_EXCEPTION
+    except (DataError):
+        return INPUT_TOO_LONG_EXCEPTION
+    finally:
+        cur.close()
 
 
 def update_ingredient_availability(db, available, i_id):
     cur = db.cursor()
-    if available == None or i_id == None:
-        raise TypeError('The inputs can not contain an empty value')
-    if not (type(available) == bool):
-        raise TypeError('Available is not of type boolean')
-    cur.execute(update_queries["update_ingredient_availability"].replace("{available}", str(available)).replace("{i_id}", str(i_id)))
-    db.commit()
-    if cur.rowcount == 0:
-        # An update went by without changing any values
-        raise Error('No row found by id')
-    cur.close()
+    try:
+        if available == None or i_id == None:
+            return EMPTY_INPUT_EXCEPTION
+        if not (type(available) == bool):
+            raise TypeError('Available is not of type boolean')
+        cur.execute(
+            update_queries["update_ingredient_availability"].replace("{available}", str(available)).replace("{i_id}",
+                                                                                                            str(i_id)))
+        db.commit()
+        if cur.rowcount == 0:
+            return NO_UPDATE_EXCEPTION
+    except (TypeError):
+        return INVALID_TYPE_EXCEPTION
+    finally:
+        cur.close()
 
 
 def update_allergene_name(db, a_name, a_id):
     cur = db.cursor()
-    if a_name == None or a_id == None:
-        raise TypeError('The inputs can not contain an empty value')
-    cur.execute(update_queries["update_allergene_name"].replace("{a_name}", a_name).replace("{a_id}", str(a_id)))
-    db.commit()
-    if cur.rowcount == 0:
-        # An update went by without changing any values
-        raise Error('No row found by id')
-    cur.close()
+    try:
+        if a_name == None or a_id == None:
+            return EMPTY_INPUT_EXCEPTION
+        cur.execute(update_queries["update_allergene_name"].replace("{a_name}", a_name).replace("{a_id}", str(a_id)))
+        db.commit()
+        if cur.rowcount == 0:
+            return NO_UPDATE_EXCEPTION
+    except (IntegrityError):
+        return DUPLICATE_VALUE_EXCEPTION
+    except (DataError):
+        return INPUT_TOO_LONG_EXCEPTION
+    finally:
+        cur.close()
