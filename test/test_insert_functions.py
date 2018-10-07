@@ -15,7 +15,7 @@ def get_db():
                                 database='test_menu')
 
 
-class TestUpdateFunctions(unittest.TestCase):
+class TestInsertFunctions(unittest.TestCase):
 
     def setUp(self):
         # Called before each test
