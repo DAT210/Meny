@@ -28,7 +28,7 @@ CREATE TABLE category (
 CREATE TABLE course (
 	c_id INT(5) AUTO_INCREMENT,
     c_name VARCHAR(64) NOT NULL UNIQUE,
-    ca_id INT(3),
+    ca_id INT(3) NOT NULL,
     price DECIMAL(6, 2),
     PRIMARY KEY (c_id),
     FOREIGN KEY (ca_id) REFERENCES category(ca_id)
@@ -69,21 +69,20 @@ INSERT INTO allergene (a_name) VALUES
     ("allergene delta"),
     ("allergene echo");
     
-    
-INSERT INTO course (c_name, price) VALUES 
-	("course alpha", "5.20"),
-    ("course bravo", "4.20"),
-    ("course charlie", "3.75"),
-    ("course delta", "2.10"),
-    ("course echo", "7.40");
-  
-  
 INSERT INTO category (ca_name) VALUES 
 	("category alpha"),
     ("category bravo"),
     ("category charlie"),
     ("category delta");
     
+    
+INSERT INTO course (c_name, ca_id, price) VALUES 
+	("course alpha", 1, "5.20"),
+    ("course bravo", 2, "4.20"),
+    ("course charlie", 1, "3.75"),
+    ("course delta", 3, "2.10"),
+    ("course echo", 4, "7.40");
+  
     
 INSERT INTO course_ingredient (c_id, i_id) VALUES
 	(1, 1),
