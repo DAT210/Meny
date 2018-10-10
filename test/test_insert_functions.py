@@ -30,39 +30,53 @@ class TestInsertFunctions(unittest.TestCase):
     def test_insert_course(self):
         db = get_db()
         # Valid input
-        insert_course(db, "insert course", 3.67)
+        insert_course(db, "insert course", 2, 3.67)
         cur = db.cursor()
         try:
-            cur.execute("SELECT c_name, price FROM course WHERE c_id = (SELECT MAX(c_id) FROM course)")
+            cur.execute("SELECT c_name, ca_id, price FROM course WHERE c_id = (SELECT MAX(c_id) FROM course)")
             values = cur.fetchone()
             name = values[0]
-            price = values[1]
+            category = values[1]
+            price = values[2]
         except Error as err:
             return err
         finally:
             cur.close()
 
         self.assertEqual(name, "insert course")
+        self.assertEqual(category, 2)
         self.assertEqual(str(price), str(3.67))
 
         # Insert invalid name
-        self.assertEqual(insert_course(db, "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", 4.56),
+        self.assertEqual(insert_course(db, "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", 2, 4.56),
                          INPUT_TOO_LONG_EXCEPTION)
 
+        # Insert with invalid category
+        self.assertEqual(insert_course(db, "course cat inv", "a", 7.86),
+                         INVALID_TYPE_EXCEPTION)
+
         # Insert invalid price
-        self.assertEqual(insert_course(db, "course with valid name", "a"),
+        self.assertEqual(insert_course(db, "course with valid name", 3, "a"),
                          INVALID_DECIMAL_VALUE)
 
         # Insert name to existing name (name must be unique)
-        self.assertEqual(insert_course(db, "course alpha", 2.13),
+        self.assertEqual(insert_course(db, "course alpha", 4, 2.13),
                          DUPLICATE_VALUE_EXCEPTION)
 
+        # Insert category with non-existing id
+        self.assertEqual(insert_course(db, "course cat none", 999, 3.21),
+                         UNKKNOWN_REFERENCE_EXCEPTION)
+
         # Insert with empty name value
-        self.assertEqual(insert_course(db, None, 5.78),
+        self.assertEqual(insert_course(db, None, 1, 5.78),
+                         EMPTY_INPUT_EXCEPTION)
+
+        # Insert with empty category
+        self.assertEqual(insert_course(db, "course cat empty", None, 5.97),
                          EMPTY_INPUT_EXCEPTION)
 
         # Insert with empty price
-        self.assertEqual(insert_course(db, "course unique name", None),
+        self.assertEqual(insert_course(db, "course unique name", 2, None),
                          EMPTY_INPUT_EXCEPTION)
         db.close()
 
@@ -132,6 +146,36 @@ class TestInsertFunctions(unittest.TestCase):
 
         # Insert with empty name value
         self.assertEqual(insert_allergene(db, None),
+                         EMPTY_INPUT_EXCEPTION)
+        db.close()
+
+
+    def test_insert_category(self):
+        db = get_db()
+        # Valid input
+        insert_category(db, "insert category")
+        cur = db.cursor()
+        try:
+            cur.execute("SELECT ca_name FROM category WHERE ca_id = (SELECT MAX(ca_id) FROM category)")
+            category = cur.fetchone()[0]
+        except Error as err:
+            return err
+        finally:
+            cur.close()
+
+        self.assertEqual(category, "insert category")
+
+        # Insert invalid name
+        self.assertEqual(insert_category(db,
+                                          "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf"),
+                         INPUT_TOO_LONG_EXCEPTION)
+
+        # Insert name to existing name (name must be unique)
+        self.assertEqual(insert_category(db, "category alpha"),
+                         DUPLICATE_VALUE_EXCEPTION)
+
+        # Insert with empty name value
+        self.assertEqual(insert_category(db, None),
                          EMPTY_INPUT_EXCEPTION)
         db.close()
 
