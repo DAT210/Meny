@@ -8,31 +8,38 @@ from mysql.connector import IntegrityError, DataError, Error
 
 
 insert_queries = {
-    "insert_course": "INSERT INTO course (c_name, price) VALUES ('{c_name}', '{price}')",
+    "insert_course": "INSERT INTO course (c_name, ca_id, price) VALUES ('{c_name}', '{ca_id}', '{price}')",
 
     "insert_ingredient": "INSERT INTO ingredient (i_name, available) VALUES ('{i_name}', {available})",
 
     "insert_allergene": "INSERT INTO allergene (a_name) VALUES ('{a_name}')",
+
+    "insert_category": "INSERT INTO category (ca_name) VALUES ('{ca_name}')",
 
     "insert_course_ingredient": "INSERT INTO course_ingredient (c_id, i_id) VALUES ({c_id}, {i_id})",
 
     "insert_ingredient_allergene": "INSERT INTO ingredient_allergene (i_id, a_id) VALUES ({i_id}, {a_id})"
 }
 
-def insert_course(db, c_name, price):
+def insert_course(db, c_name, ca_id, price):
     cur = db.cursor()
     try:
-        if c_name == None or price == None:
+        if c_name == None or ca_id == None or price == None:
             return EMPTY_INPUT_EXCEPTION
-        cur.execute(insert_queries["insert_course"].replace("{c_name}", c_name).replace("{price}", str(price)))
+        cur.execute(insert_queries["insert_course"].replace("{c_name}", c_name).replace("{ca_id}", str(ca_id)).replace("{price}", str(price)))
         db.commit()
-    except (IntegrityError):
+    except (IntegrityError) as err:
+        if 'Cannot add or update a child row: a foreign key constraint fails' in str(err):
+            return UNKKNOWN_REFERENCE_EXCEPTION
         return DUPLICATE_VALUE_EXCEPTION
     except (DataError):
         return INPUT_TOO_LONG_EXCEPTION
     except (Error) as err:
         if 'Incorrect decimal value' in str(err):
             return INVALID_DECIMAL_VALUE
+        if 'Incorrect integer value' in str(err):
+            return INVALID_TYPE_EXCEPTION
+
         raise err
     finally:
         cur.close()
@@ -52,9 +59,10 @@ def insert_ingredient(db, i_name, available):
     except Error as err:
         if 'Unknown column' in str(err):
             return INVALID_TYPE_EXCEPTION
-        print(str(err))
+        raise err
     finally:
         cur.close()
+
 
 def insert_allergene(db, a_name):
     cur = db.cursor()
@@ -62,6 +70,21 @@ def insert_allergene(db, a_name):
         if a_name == None:
             return EMPTY_INPUT_EXCEPTION
         cur.execute(insert_queries["insert_allergene"].replace("{a_name}", a_name))
+        db.commit()
+    except (IntegrityError):
+        return DUPLICATE_VALUE_EXCEPTION
+    except (DataError):
+        return INPUT_TOO_LONG_EXCEPTION
+    finally:
+        cur.close()
+
+
+def insert_category(db, ca_name):
+    cur = db.cursor()
+    try:
+        if ca_name == None:
+            return EMPTY_INPUT_EXCEPTION
+        cur.execute(insert_queries["insert_category"].replace("{ca_name}", ca_name))
         db.commit()
     except (IntegrityError):
         return DUPLICATE_VALUE_EXCEPTION
