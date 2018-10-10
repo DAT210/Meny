@@ -7,6 +7,7 @@ from exceptions import *
 from update_functions import *
 from mysql.connector import errorcode, IntegrityError, DataError, Error
 
+# Magnus Steinstø
 
 def get_db():
     return mysql.connector.connect(user='root', password='root',
@@ -61,6 +62,43 @@ class TestUpdateFunctions(unittest.TestCase):
                          EMPTY_INPUT_EXCEPTION)
 
         db.close()
+
+    def test_update_course_category(self):
+        db = get_db()
+        # Valid input
+        update_course_category(db, 2, 1)
+        cur = db.cursor()
+        try:
+            cur.execute("SELECT ca_id FROM course WHERE c_id=1")
+            category = cur.fetchone()[0]
+        except Error as err:
+            return err
+        finally:
+            cur.close()
+        self.assertEqual(2, category)
+
+        # Update category to invalid value
+        self.assertEqual(update_course_category(db, "a", 3),
+                         INVALID_TYPE_EXCEPTION)
+
+        # Update category with non-existing id
+        self.assertEqual(update_course_category(db, 3, 999),
+                         NO_UPDATE_EXCEPTION)
+
+        # Update to non-existing category
+        self.assertEqual(update_course_category(db, 999, 2),
+                         UNKKNOWN_REFERENCE_EXCEPTION)
+
+        # Update category to empty value
+        self.assertEqual(update_course_category(db, None, 4),
+                         EMPTY_INPUT_EXCEPTION)
+
+        # Update category with empty id
+        self.assertEqual(update_course_category(db, 3, None),
+                         EMPTY_INPUT_EXCEPTION)
+
+        db.close()
+
 
     def test_update_course_price(self):
         db = get_db()

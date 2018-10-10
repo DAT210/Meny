@@ -4,11 +4,15 @@ import types
 import mysql.connector
 from mysql.connector import IntegrityError, DataError, Error
 
+# Magnus Steinstø
 
 update_queries = {
     # ------------------------ Course ------------------------
     # Update course name by id
     "update_course_name": "UPDATE course SET c_name='{c_name}' WHERE c_id={c_id}",
+
+    # Update course name by id
+    "update_course_category": "UPDATE course SET ca_id='{ca_id}' WHERE c_id={c_id}",
 
     # Update course price by id
     "update_course_price": "UPDATE course SET price='{price}' WHERE c_id={c_id}",
@@ -38,6 +42,27 @@ def update_course_name(db, c_name, c_id):
         return DUPLICATE_VALUE_EXCEPTION
     except (DataError):
         return INPUT_TOO_LONG_EXCEPTION
+
+    finally:
+        cur.close()
+
+
+def update_course_category(db, ca_id, c_id):
+    cur = db.cursor()
+    try:
+        if ca_id == None or c_id == None:
+            return EMPTY_INPUT_EXCEPTION
+        cur.execute(update_queries["update_course_category"].replace("{ca_id}", str(ca_id)).replace("{c_id}", str(c_id)))
+        db.commit()
+        if cur.rowcount == 0:
+            return NO_UPDATE_EXCEPTION
+    except (Error) as err:
+        if 'Incorrect integer value:' in str(err):
+            return INVALID_TYPE_EXCEPTION
+        if 'Cannot add or update a child row: a foreign key constraint fails' in str(err):
+            return UNKKNOWN_REFERENCE_EXCEPTION
+        print(str(err))
+        raise err
 
     finally:
         cur.close()
