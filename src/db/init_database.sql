@@ -29,6 +29,7 @@ CREATE TABLE course (
 	c_id INT(5) AUTO_INCREMENT,
     c_name VARCHAR(64) NOT NULL UNIQUE,
     ca_id INT(3) NOT NULL,
+    info VARCHAR(256),
     price DECIMAL(6, 2),
     PRIMARY KEY (c_id),
     FOREIGN KEY (ca_id) REFERENCES category(ca_id)
@@ -41,6 +42,33 @@ CREATE TABLE course_ingredient (
     PRIMARY KEY (c_id, i_id),
     FOREIGN KEY (c_id) REFERENCES course(c_id),
 	FOREIGN KEY (i_id) REFERENCES ingredient(i_id)
+);
+
+
+CREATE TABLE selection_category (
+	sc_id INT(3) AUTO_INCREMENT,
+    sc_name VARCHAR(64) NOT NULL UNIQUE,
+    PRIMARY KEY (sc_id)
+);
+
+
+CREATE TABLE selection (
+	s_id INT(6) AUTO_INCREMENT,
+    s_name VARCHAR(64) NOT NULL UNIQUE,
+    sc_id INT(3),
+    i_id INT(6),
+    PRIMARY KEY (s_id),
+    FOREIGN KEY (sc_id) REFERENCES selection_category(sc_id),
+    FOREIGN KEY (i_id) REFERENCES ingredient(i_id)
+);
+
+
+CREATE TABLE course_selection (
+	c_id INT(5),
+    s_id INT(6),
+    PRIMARY KEY (c_id, s_id),
+    FOREIGN KEY (c_id) REFERENCES course(c_id),
+    FOREIGN KEY (s_id) REFERENCES selection(s_id)
 );
 
 
@@ -76,12 +104,12 @@ INSERT INTO category (ca_name) VALUES
     ("category delta");
     
     
-INSERT INTO course (c_name, ca_id, price) VALUES 
-	("course alpha", 1, "5.20"),
-    ("course bravo", 2, "4.20"),
-    ("course charlie", 1, "3.75"),
-    ("course delta", 3, "2.10"),
-    ("course echo", 4, "7.40");
+INSERT INTO course (c_name, ca_id, info, price) VALUES 
+	("course alpha", 1, "info alpha", "5.20"),
+    ("course bravo", 2, "info bravo", "4.20"),
+    ("course charlie", 1, "info charlie", "3.75"),
+    ("course delta", 3, "info delta", "2.10"),
+    ("course echo", 4, "info echo", "7.40");
   
     
 INSERT INTO course_ingredient (c_id, i_id) VALUES
@@ -98,6 +126,28 @@ INSERT INTO course_ingredient (c_id, i_id) VALUES
     (5, 2),
     (5, 3);
     
+    
+INSERT INTO selection_category (sc_name) VALUES 
+	("selection category alpha"),
+    ("selection category bravo");
+    
+    
+INSERT INTO selection (s_name, sc_id, i_id) VALUES 
+	("selection alpha", 1, NULL),
+    ("selection bravo", 2, 2),
+    ("selection charlie", 1, 1),
+    ("selection delta", 1, 1);
+    
+    
+INSERT INTO course_selection (c_id, s_id) VALUES 
+	(1, 1),
+    (1, 2),
+    (2, 2),
+    (3, 3),
+    (4, 1),
+    (4, 2);
+  
+  
 INSERT INTO ingredient_allergene (i_id, a_id) VALUES
 	(1, 2),
     (2, 3),
