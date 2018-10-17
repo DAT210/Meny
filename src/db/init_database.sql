@@ -35,12 +35,47 @@ CREATE TABLE course (
 );
 
 
+CREATE TABLE course_info (
+	c_id INT(5) NOT NULL UNIQUE,
+    info VARCHAR(512) NOT NULL,
+    PRIMARY KEY (c_id),
+    FOREIGN KEY (c_id) REFERENCES course(c_id)
+);
+
+
 CREATE TABLE course_ingredient (
 	c_id INT(5),
     i_id INT(6),
     PRIMARY KEY (c_id, i_id),
     FOREIGN KEY (c_id) REFERENCES course(c_id),
 	FOREIGN KEY (i_id) REFERENCES ingredient(i_id)
+);
+
+
+CREATE TABLE selection_category (
+	sc_id INT(3) AUTO_INCREMENT,
+    sc_name VARCHAR(64) NOT NULL UNIQUE,
+    PRIMARY KEY (sc_id)
+);
+
+
+CREATE TABLE selection (
+	s_id INT(6) AUTO_INCREMENT,
+    s_name VARCHAR(64) NOT NULL UNIQUE,
+    sc_id INT(3),
+    i_id INT(6),
+    PRIMARY KEY (s_id),
+    FOREIGN KEY (sc_id) REFERENCES selection_category(sc_id),
+    FOREIGN KEY (i_id) REFERENCES ingredient(i_id)
+);
+
+
+CREATE TABLE course_selection (
+	c_id INT(5),
+    s_id INT(6),
+    PRIMARY KEY (c_id, s_id),
+    FOREIGN KEY (c_id) REFERENCES course(c_id),
+    FOREIGN KEY (s_id) REFERENCES selection(s_id)
 );
 
 
@@ -82,6 +117,13 @@ INSERT INTO course (c_name, ca_id, price) VALUES
     ("course charlie", 1, "3.75"),
     ("course delta", 3, "2.10"),
     ("course echo", 4, "7.40");
+    
+
+INSERT INTO course_info (c_id, info) VALUES 
+	(1, "info alpha"),
+    (3, "info charlie"),
+    (4, "info delta"),
+    (5, "info echo");
   
     
 INSERT INTO course_ingredient (c_id, i_id) VALUES
@@ -98,6 +140,28 @@ INSERT INTO course_ingredient (c_id, i_id) VALUES
     (5, 2),
     (5, 3);
     
+    
+INSERT INTO selection_category (sc_name) VALUES 
+	("selection category alpha"),
+    ("selection category bravo");
+    
+    
+INSERT INTO selection (s_name, sc_id, i_id) VALUES 
+	("selection alpha", 1, NULL),
+    ("selection bravo", 2, 2),
+    ("selection charlie", 1, 1),
+    ("selection delta", 1, 1);
+    
+    
+INSERT INTO course_selection (c_id, s_id) VALUES 
+	(1, 1),
+    (1, 2),
+    (2, 2),
+    (3, 3),
+    (4, 1),
+    (4, 2);
+  
+  
 INSERT INTO ingredient_allergene (i_id, a_id) VALUES
 	(1, 2),
     (2, 3),
