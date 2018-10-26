@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container-fluid text-center">
+  <h2>Courses to cook</h2>         
+  <table class="table table-bordered" style="text-align:center;">
+    <thead>
+      <tr>
+        <th></th>
+		<th>Courses</th>
+        <th>Extra</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+		<td><button type="button" class="btn btn-primary btn-md"  data-somestringvalue-text="Done">Ready</button></td>
+        <td>Course 1</td>
+        <td>Apple, Cheese</td>
+        <td>Pepperoni</td>
+      </tr>
+      <tr>
+		<td><button type="button" class="btn btn-primary btn-md"  data-somestringvalue-text="Done">Ready</button></td>
+        <td>Course 5</td>
+        <td>Ham, Paprika</td>
+        <td>Pineapple</td>
+      </tr>
+      <tr>
+		<td><button type="button" class="btn btn-primary btn-md" data-somestringvalue-text="Done">Ready</button></td>
+        <td>Course 3</td>
+        <td>Mango, Blueberry</td>
+        <td>Pear</td>
+      </tr>
+	   <tr>
+		<td><button type="button"  class="btn btn-primary btn-md" data-somestringvalue-text="Done" >Ready</button></td>
+        <td>Course 12</td>
+        <td>Cod</td>
+        <td>French fries</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}
