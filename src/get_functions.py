@@ -23,6 +23,9 @@ get_queries = {
     # Get all categories
     "get_categories": "SELECT ca_id, ca_name FROM category",
 
+    # Get course by c_id
+    "get_course_by_id": "SELECT c_name, ca_id, info, price FROM course WHERE c_id={c_id}",
+
     # Get all selection categories
     "get_selection_categories": "SELECT sc_id, sc_name FROM selection_category",
 
@@ -144,6 +147,22 @@ def get_selections(db):
     finally:
         cur.close()
 
+
+def get_course_by_id(db, c_id):
+    cur = db.cursor()
+    row = ()
+    try:
+        if c_id == None:
+            return EMPTY_INPUT_EXCEPTION
+        cur.execute(get_queries["get_course_by_id"].replace("{c_id}", str(c_id)))
+        row = cur.fetchone()
+    except (Error) as err:
+        if 'Unknown column' in str(err):
+            return INVALID_TYPE_EXCEPTION
+        raise err
+    finally:
+        cur.close()
+    return row
 
 def get_ingredients_by_course(db, c_id):
     cur = db.cursor()
