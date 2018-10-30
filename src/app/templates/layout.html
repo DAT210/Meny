@@ -15,8 +15,17 @@ $(document).ready(function(){
     $(".btn").click(function(){
 		 $(this).button('somestringvalue');
         $(this).button('toggle');
+        document.getElementById("d-none").className="btn btn-primary btn-md";
     });   
 });
+
+
+function deleteRow(r) {
+    var i = r.parentNode.parentNode.rowIndex;
+    document.getElementById("myTable").deleteRow(i);
+
+}
+
 </script>
 
 {% block content %}{% endblock %}
