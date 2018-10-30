@@ -11,11 +11,15 @@
 <body>
 
 <script>
+var x=1;
+
 $(document).ready(function(){
     $(".btn").click(function(){
-		 $(this).button('somestringvalue');
-        $(this).button('toggle');
-        document.getElementById("d-none").className="btn btn-primary btn-md";
+		$(this).button('somestringvalue');
+        if (this.value=="Done") {
+        deleteRow(this);
+       }
+        this.value="Done";
     });   
 });
 
