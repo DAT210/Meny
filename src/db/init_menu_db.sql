@@ -57,6 +57,7 @@ CREATE TABLE selection (
     s_name VARCHAR(64) NOT NULL UNIQUE,
     sc_id INT(3),
     i_id INT(6),
+    s_price DECIMAL(6, 2),
     PRIMARY KEY (s_id),
     FOREIGN KEY (sc_id) REFERENCES selection_category(sc_id),
     FOREIGN KEY (i_id) REFERENCES ingredient(i_id)
@@ -275,11 +276,11 @@ INSERT INTO selection_category (sc_name) VALUES
     ("selection category bravo");
     
     
-INSERT INTO selection (s_name, sc_id, i_id) VALUES 
-	("selection alpha", 1, NULL),
-    ("selection bravo", 2, 2),
-    ("selection charlie", 1, 1),
-    ("selection delta", 1, 1);
+INSERT INTO selection (s_name, sc_id, i_id, s_price) VALUES 
+	("selection alpha", 1, NULL, NULL),
+    ("selection bravo", 2, 2, "1.29"),
+    ("selection charlie", 1, 1, "0.67"),
+    ("selection delta", 1, 1, "10.65");
     
     
 INSERT INTO course_selection (c_id, s_id) VALUES 
