@@ -263,14 +263,15 @@ class TestInsertFunctions(unittest.TestCase):
     def test_insert_selection(self):
         db = get_db()
         # Valid input
-        insert_selection(db, "insert selection", 2, 2)
+        insert_selection(db, "insert selection", 2, 2, 0.01)
         cur = db.cursor()
         try:
-            cur.execute("SELECT s_name, sc_id, i_id FROM selection WHERE s_id = (SELECT MAX(s_id) FROM selection)")
+            cur.execute("SELECT s_name, sc_id, i_id, s_price FROM selection WHERE s_id = (SELECT MAX(s_id) FROM selection)")
             values = cur.fetchone()
             name = values[0]
             category = values[1]
             ingredient = values[2]
+            price = values[3]
         except Error as err:
             return err
         finally:
@@ -279,33 +280,38 @@ class TestInsertFunctions(unittest.TestCase):
         self.assertEqual(name, "insert selection")
         self.assertEqual(category, 2)
         self.assertEqual(ingredient, 2)
-
+        self.assertEqual(str(price), str(0.01))
+        
         # Insert invalid name
-        self.assertEqual(insert_selection(db, "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", 1, 1),
+        self.assertEqual(insert_selection(db, "asdfasdfasdfasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf", 1, 1, 3.39),
                          INPUT_TOO_LONG_EXCEPTION)
 
         # Insert with invalid category
-        self.assertEqual(insert_selection(db, "selection cat inv", "a", 3),
+        self.assertEqual(insert_selection(db, "selection cat inv", "a", 3, 7.65),
                          INVALID_TYPE_EXCEPTION)
-
+        
         # Insert with invalid ingredient
-        self.assertEqual(insert_selection(db, "selection cat inv", 2, "a"),
+        self.assertEqual(insert_selection(db, "selection cat inv", 2, "a", 4.43),
                          INVALID_TYPE_EXCEPTION)
-
+        
+        # Insert with invalid s_price
+        self.assertEqual(insert_selection(db, "selection cat inv", 2, "a", "a"),
+                         INVALID_TYPE_EXCEPTION)
+        
         # Insert name to existing name (name must be unique)
-        self.assertEqual(insert_selection(db, "selection alpha", 1, 4),
+        self.assertEqual(insert_selection(db, "selection alpha", 1, 4, 2.15),
                          DUPLICATE_VALUE_EXCEPTION)
 
         # Insert category with non-existing selection category id
-        self.assertEqual(insert_selection(db, "selection cat none", 999, 4),
+        self.assertEqual(insert_selection(db, "selection cat none", 999, 4, 2.34),
                          UNKKNOWN_REFERENCE_EXCEPTION)
 
         # Insert with empty name value
-        self.assertEqual(insert_selection(db, None, 1, 3),
+        self.assertEqual(insert_selection(db, None, 1, 3, "0.99"),
                          EMPTY_INPUT_EXCEPTION)
 
         # Insert with empty category
-        self.assertEqual(insert_selection(db, "selection cat empty", None, 3),
+        self.assertEqual(insert_selection(db, "selection cat empty", None, 3, 2.6),
                          EMPTY_INPUT_EXCEPTION)
         db.close()
 
