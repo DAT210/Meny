@@ -449,7 +449,32 @@ class TestUpdateFunctions(unittest.TestCase):
 
         db.close()
 
+    def test_update_selection_price(self):
+        db = get_db()
+        # Valid input
+        update_functions.update_selection_price(db, 5.55, 1)
+        cur = db.cursor()
+        try:
+            cur.execute("SELECT s_price FROM selection WHERE s_id=1")
+            price = cur.fetchone()[0]
+        except Error as err:
+            return err
+        finally:
+            cur.close()
+        self.assertEqual(str(5.55), str(price))
 
+        # Update price to invalid value
+        self.assertEqual(update_selection_price(db, "asdfasdfasd", 4),
+                         INVALID_DECIMAL_VALUE)
+
+        # Update price with non-existing id
+        self.assertEqual(update_selection_price(db, 8.89, 999),
+                         NO_UPDATE_EXCEPTION)
+
+        # Update price with empty id
+        self.assertEqual(update_selection_price(db, 4.34, None),
+                         EMPTY_INPUT_EXCEPTION)
+        db.close()
 
 
 if __name__ == '__main__':
