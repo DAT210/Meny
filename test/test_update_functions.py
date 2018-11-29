@@ -203,7 +203,7 @@ class TestUpdateFunctions(unittest.TestCase):
     def test_update_ingredient_availability(self):
         db = get_db()
         # Valid input
-        update_functions.update_ingredient_availability(db, False, 1)
+        update_ingredient_availability(db, False, 1)
         cur = db.cursor()
         try:
             cur.execute("SELECT available FROM ingredient WHERE i_id=1")
@@ -212,7 +212,8 @@ class TestUpdateFunctions(unittest.TestCase):
             return err
         finally:
             cur.close()
-        self.assertEqual(False, available)
+            
+        self.assertEqual(0, available)
 
         # Update available to invalid value
         self.assertEqual(update_ingredient_availability(db, "a", 4),
