@@ -1,0 +1,19 @@
+{%extends "index.html"%}
+{% block content %}
+<div>
+	<h1>Order</h1>
+	<form action="{{ url_for('do_add_to_cart')}}" method="POST">
+		<table width=80%>
+			{% for course in courses %}
+			<tr>
+                <td><img src="../static/images/pizza.jpg" width="25%" alt="pizza"></td>
+				<td width="25%">{{course['c_name']}}</td>
+				<td width="25%">{{course['price']}}$</td>
+				<!--<td><input type="checkbox" name="cart" value="{{course['c_name']}}"/></td> -->
+			</tr>
+			{%endfor%}
+		</table>
+	<input type="submit" name="formSubmit" value="Submit"/>
+	</form>
+</div>
+{% endblock %}
