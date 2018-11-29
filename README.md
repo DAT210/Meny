@@ -10,7 +10,7 @@ https://github.com/DAT210/Internal-Systems
 First clone the repository.
 
 In order for the menu page to work on your system, you need to set up the menu database. 
-We have provided an initial script called init_menu_db.sql. This file is located in `/Menu/src/db/` folder.
+We have provided an initial script called `init_menu_db.sql`. This file is located in `/Menu/src/db/` folder.
 Link to the `db` folder: https://github.com/DAT210/Menu/tree/master/src/db
 
 Afterwards you need to edit the `app.py` section: "#Change this the INFORMATION FOR YOUR DATABASE ACCESS OK" on lines between 11-17 in the `src/app.py` file. 
@@ -30,7 +30,16 @@ user_info = {
 
 }
 ```
-Since this page doesn't support docker, you also need to make sure that you have imported the needed packages. You can find these on lines 1-5. Mostly its just the `flask` and `mysql.connector` packages that needs to be installed on your python intepreter.
+Since this page doesn't support docker, you also need to make sure that you have imported the needed packages. You can find these on lines 1-5:
+```py
+
+from flask import Flask, render_template, send_from_directory, g, request, json
+import os
+import mysql.connector
+import socket
+from get_functions import *
+```
+Mostly its just the `flask` and `mysql.connector` packages that needs to be installed on your python intepreter.
 
 Once all this is done you can go to the src folder and run the app.py to start the menu server.
 The ip address set for the menu page is http://localhost:5000/ , alternatively http://127.0.0.1:5000/ .
