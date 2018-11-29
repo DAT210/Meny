@@ -34,7 +34,8 @@ user_info = {
 ```
 Since this page doesn't support docker, you also need to make sure that you have imported the needed packages. You can find these on lines 1-5. Mostly its just the flask and mysql.connector packages that needs to be installed on your python intepreter.
 
-Once all this is done you can go to the src folder and run the app.py.
+Once all this is done you can go to the src folder and run the app.py to start the menu server.
+The ip address set for the menu page is http://localhost:5000/ , alternatively http://127.0.0.1:5000/ .
 
 ## Developing
 
