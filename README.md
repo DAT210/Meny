@@ -1,6 +1,4 @@
-![Logo of the project](./images/logo.sample.png)
-
-# Menu &middot; [![Build Status](https://img.shields.io/travis/npm/npm/latest.svg?style=flat-square)](https://travis-ci.org/npm/npm) [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/npm) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
+# Menu &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
 > Everything related to the menu of the restaurant.
 
 Developed by Group 4 along with Internal Systems and Food Preparation.
@@ -8,98 +6,50 @@ Links to the other repositories:
 https://github.com/DAT210/Food-Preparation
 https://github.com/DAT210/Internal-Systems
 
-## Installing / Getting started
+## Running the Menu app 
+First clone the repository.
 
-A quick introduction of the minimal setup you need to get a hello world up &
-running.
+In order for the menu page to work on your system, you need to set up the menu database. 
+We have provided an initial script called `init_menu_db.sql`. This file is located in `/Menu/src/db/` folder.
+Link to the `db` folder: https://github.com/DAT210/Menu/tree/master/src/db
 
-```shell
-commands here
+Afterwards you need to edit the `app.py` section: "#Change this the INFORMATION FOR YOUR DATABASE ACCESS OK" on lines between 11-17 in the `src/app.py` file. 
+Edit the database information to match your sql settings, most importantly change "password": "INSERTPASSWORDHERE" to match your sql password.
+```py
+# CHANGE THIS INFORMATION FOR YOUR DATABASE ACCESS OK
+
+user_info = {
+
+    "username": "root",
+
+    "password": "INSERTPASSWORDHERE",
+
+    "database": "menu",
+
+    "hostname": "localhost"
+
+}
 ```
+Since this page doesn't support docker, you also need to make sure that you have imported the needed packages. You can find these on lines 1-5:
+```py
 
-Here you should say what actually happens when you execute the code above.
+from flask import Flask, render_template, send_from_directory, g, request, json
+import os
+import mysql.connector
+import socket
+from get_functions import *
+```
+Mostly its just the `flask` and `mysql.connector` packages that needs to be installed on your python intepreter.
+
+Once all this is done you can go to the src folder and run the app.py to start the menu server.
+The ip address set for the menu page is http://localhost:5000/ , alternatively http://127.0.0.1:5000/ .
 
 ## Developing
 
 ### Built With
-List main libraries, frameworks used including versions (React, Angular etc...)
+The menu webpage is built with the Flask framework in Python, HTML-templating with Jinja and JavaScript/jQuery for functionality. It also uses Bootstrap and CSS for styling.
 
 ### Prerequisites
-What is needed to set up the dev environment. For instance, global dependencies or any other tools. include download links.
+Since this page dosen't support docker, you need to install Python, Mysql and MySQL server. 
 
-
-### Setting up Dev
-
-Here's a brief intro about what a developer must do in order to start developing
-the project further:
-
-```shell
-git clone https://github.com/your/your-project.git
-cd your-project/
-packagemanager install
-```
-
-And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
-
-### Building
-
-If your project needs some additional steps for the developer to build the
-project after some code changes, state them here. for example:
-
-```shell
-./configure
-make
-make install
-```
-
-Here again you should state what actually happens when the code above gets
-executed.
-
-### Deploying / Publishing
-give instructions on how to build and release a new version
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
-
-```shell
-packagemanager deploy your-project -s server.com -u username -p password
-```
-
-And again you'd need to tell what the previous code actually does.
-
-## Versioning
-
-We can maybe use [SemVer](http://semver.org/) for versioning. For the versions available, see the [link to tags on this repository](/tags).
-
-
-## Configuration
-
-Here you should write what are all of the configurations a user can enter when
-using the project.
-
-## Tests
-
-Describe and show how to run the tests with code examples.
-Explain what these tests test and why.
-
-```shell
-Give an example
-```
-
-## Style guide
-
-Explain your code style and show how to check it.
-
-## Api Reference
-
-If the api is external, link to api documentation. If not describe your api including authentication methods as well as explaining all the endpoints with their required parameters.
-
-
-## Database
-
-Explaining what database (and version) has been used. Provide download links.
-Documents your database design and schemas, relations etc... 
-
-## Licensing
-
-State what the license is and how to find the text version of the license.
 
