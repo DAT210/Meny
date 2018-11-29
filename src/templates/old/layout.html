@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename="styles/style.css") }}">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> <!--Bootstrap ver 3.6 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="static/poptest.js"></script>
+</head>
+<body>
+<header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for("order") }}">Order</a></li>
+                <li><a href="{{ url_for("menu") }}">Meny</a></li> <!--Jørgen testing site -->
+            </ul>
+        </nav>
+</header>
+{% block content %}{% endblock %}
+</body>
+<footer>
+&copy; 2018
+</footer>
+</html>

@@ -1,0 +1,19 @@
+{%extends "index.html"%}
+{% block content %}
+<div>
+	<h1>Cart</h1>
+	
+	You selected {{amount}} menu(s): <br>
+	<table>
+		{% for course in courses %}
+		<tr>
+			<td>{{course["c_name"]}}</td>
+			<td>{{course["price"]}}</td>
+			<td><img src='../static/images/minus.png' width='10%' padding-left='15%'></td>
+		</tr>
+		{%endfor%}
+	</table>
+	<br>The total price is {{endprice}}
+</div>
+{% endblock %}
+
