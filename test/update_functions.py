@@ -25,11 +25,7 @@ update_queries = {
     "update_ingredient_name": "UPDATE ingredient SET i_name='{i_name}' WHERE i_id='{i_id}'",
 
     # Update ingredient availability by id
-<<<<<<< HEAD
-    "update_ingredient_availability": "UPDATE ingredient SET available='{available}' WHERE i_id='{i_id}'",
-=======
     "update_ingredient_availability": "UPDATE ingredient SET available={available} WHERE i_id='{i_id}'",
->>>>>>> 4eef87d5a7190613858d04466adb95f4fe5628f9
 
     # ------------------------ Allergene ------------------------
     # Update allergene name by id
@@ -51,17 +47,10 @@ update_queries = {
     "update_selection_selection_category": "UPDATE selection SET sc_id='{sc_id}' WHERE s_id='{s_id}'",
 
     # Update selection ingredient by id
-<<<<<<< HEAD
-    "update_selection_ingredient": "UPDATE selection SET i_id='{i_id}' WHERE s_id='{s_id}'",
-
-    # Update selection price by id
-    "update_selection_price": "UPDATE selection SET s_price='{s_price}' WHERE s_id='{s_id}'"
-=======
     "update_selection_ingredient": "UPDATE selection SET i_id={i_id} WHERE s_id={s_id}",
 
     # Update selection price by id
     "update_selection_price": "UPDATE selection SET s_price={s_price} WHERE s_id={s_id}"
->>>>>>> 4eef87d5a7190613858d04466adb95f4fe5628f9
 }
 
 def update_course_name(db, c_name, c_id):
@@ -170,10 +159,7 @@ def update_ingredient_availability(db, available, i_id):
             return NO_UPDATE_EXCEPTION
     except (TypeError):
         return INVALID_TYPE_EXCEPTION
-<<<<<<< HEAD
-=======
     
->>>>>>> 4eef87d5a7190613858d04466adb95f4fe5628f9
     finally:
         cur.close()
 
@@ -260,13 +246,7 @@ def update_selection_selection_category(db, sc_id, s_id):
             return INVALID_TYPE_EXCEPTION
         if 'Cannot add or update a child row: a foreign key constraint fails' in str(err):
             return UNKKNOWN_REFERENCE_EXCEPTION
-<<<<<<< HEAD
-        print(str(err))
         raise err
-
-=======
-        raise err
->>>>>>> 4eef87d5a7190613858d04466adb95f4fe5628f9
     finally:
         cur.close()
 
@@ -281,18 +261,10 @@ def update_selection_ingredient(db, i_id, s_id):
         if cur.rowcount == 0:
             return NO_UPDATE_EXCEPTION
     except (Error) as err:
-<<<<<<< HEAD
-        if 'Incorrect integer value:' in str(err):
-            return INVALID_TYPE_EXCEPTION
-        if 'Cannot add or update a child row: a foreign key constraint fails' in str(err):
-            return UNKKNOWN_REFERENCE_EXCEPTION
-        print(str(err))
-=======
         if 'Unknown column' in str(err):
             return INVALID_TYPE_EXCEPTION
         if 'Cannot add or update a child row: a foreign key constraint fails' in str(err):
             return UNKKNOWN_REFERENCE_EXCEPTION
->>>>>>> 4eef87d5a7190613858d04466adb95f4fe5628f9
         raise err
 
     finally:
@@ -309,14 +281,9 @@ def update_selection_price(db, s_price, s_id):
         if cur.rowcount == 0:
             return NO_UPDATE_EXCEPTION
     except (Error) as err:
-<<<<<<< HEAD
-        if 'Incorrect decimal value' in str(err):
-            return INVALID_DECIMAL_VALUE
-=======
         if 'Unknown column' in str(err):
             return INVALID_DECIMAL_VALUE
         print(str(err))
->>>>>>> 4eef87d5a7190613858d04466adb95f4fe5628f9
         raise err
     finally:
         cur.close()
