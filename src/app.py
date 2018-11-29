@@ -11,7 +11,7 @@ app.debug = True
 # CHANGE THIS INFORMATION FOR YOUR DATABASE ACCESS OK
 user_info = {
     "username": "root",
-    "password": "MySQLNetty6",
+    "password": "INSERTPASSWORDHERE",
     "database": "menu",
     "hostname": "localhost"
 }
