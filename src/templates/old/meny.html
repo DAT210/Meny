@@ -1,0 +1,66 @@
+{%extends "index.html"%}
+{% block content %}
+<div>
+	<h1>Menu</h1>
+	<form action="{{ url_for('do_add_to_cart')}}" method="POST">
+			{% for courseid in courseinfo.keys() %}
+                <div class="course" id="{{ courseid}}">
+                {{ courseid }}
+                    <a class="item" href="#">{{ courseinfo[courseid]["name"] }}</a> {{ courseinfo[courseid]["price"] }}$
+                    <div class="details">
+                        <p>Desc:Insert description here</p><span class="glyphicon glyphicon-remove cancel"></span>
+                        <br>
+                        <img src="/static/images/sliceofpizza150width.jpg" /> <!--<img src=images/{{ courseinfo[courseid]["name"] }}.jpg/> -->
+                        <div class="Ingredientlist">
+                            <!--<ul>
+                                {#% for itemid in courseinfo[courseid]["ingredientlist"] %#}
+                                    <li>{#  { ingredientsinfo[itemid]["name"] }}  {%  if ingredientsinfo[itemid]["available"] != 1 %}Out of stock!{% else %}{% endif %}#}</li>
+                                    {#% endfor %#}
+                            </ul>-->
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Ingredients</th>
+                                    <!--<th>Available</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        {% for itemid in courseinfo[courseid]["ingredientlist"] %}
+                                            <tr>
+                                                <td>  {{ingredientsinfo[itemid]["name"]}}</td>
+                                                <td> {% if ingredientsinfo[itemid]["available"] != 1 %} "Out of Stock"{% else %}{% endif %}</td>
+                                            <td>
+                                                <!--<label>Default<input type="radio" value="normal" name="ingredientedited {#  #}{ courseid }}" checked/></label><br />
+                                                <label>Extra<input type="radio" value="extra" name="ingredientedited {#  #}{ courseid }} "/></label><br/>
+                                                <label>Remove<input type="radio" value="remove" name="ingredientedited {#  #}{ courseid }}"/></label>-->
+                                            </td>
+                                        {% endfor %}
+                                            </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    <br />
+                        <label for="chooseamount">Amount:</label><select name="chooseamount" class="chooseamount" id="select{{ courseid }}">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                        <a class="btn btn-primary btn-sm additem">Add to Cart</a>
+                    </div>
+                </div>
+            {%endfor%}
+	        <!--<input type="submit" name="formSubmit" value="Submit"/>-->
+	</form>
+</div>
+
+    <div id="shoppingcart">
+        <div id="shoppingitems">
+
+        </div>
+        <div id="total">
+
+        </div>
+    </div>
+
+{% endblock %}

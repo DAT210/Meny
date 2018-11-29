@@ -1,0 +1,185 @@
+{% extends "layout.html" %}
+{% block content %}
+{%include "header.html"%}
+	<section class="section-dinner bgwhite">
+		<div class="header-dinner parallax0 parallax100" style="background-image: url(../static/images/heading-page-03.jpg);">
+			<div class="bg1-overlay t-center p-t-170 p-b-165">
+				<h2 class="tit4 t-center">
+					Daily Deal
+				</h2>
+			</div>
+		</div>
+ 		<div class="container">
+			<div class="row p-t-108 p-b-70">
+					<!-- Block3 -->
+					<div class="blo3 flex-w flex-col-l-sm m-b-30">
+						<div class="pic-blo3 size50 bo-rad-10 hov-img-zoom m-r-28">
+							<a href="#"><img src="../static/images/custom/20.jpg" alt="IMG-MENU"></a>
+						</div>
+ 						<div class="text-blo3 size21 flex-col-l-m">
+							<a href="#" class="txt21 m-b-3">
+									Maecenas tristique
+							</a>
+ 							<span class="txt23">
+								some shit
+							</span>
+ 							<span class="txt22 m-t-20">
+								399$
+							</span>
+						</div>
+					</div>
+			</div>
+		</div>
+	</section>
+	
+	<section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15" style="background-image: url(static/images/bg-title-page-01.jpg);">
+		<h2 class="tit6 t-center">
+			Pato Menu
+		</h2>
+	</section>
+ 	<!-- Main menu -->
+	<section class="section-mainmenu p-t-110 p-b-70 bg1-pattern">
+		<div class="container">
+			<div class="row">
+			{% for category,courses in patoMenu.items() %}
+				{% if loop.cycle('1', '2') == '1' %}
+				<div class="col-md-10 col-lg-6 p-r-35 p-r-15-lg m-l-r-auto">
+				{%endif%}
+					<div class="wrap-item-mainmenu p-b-22">
+						<h3 class="tit-mainmenu tit10 p-b-25">
+							{{category}}
+						</h3>
+						{% for course in courses %}
+							<!-- Item mainmenu -->
+							<div class="item-mainmenu m-b-36">
+								<div class="flex-w flex-b m-b-3">
+									<a href="#" class="name-item-mainmenu txt21 item">
+										{{ course.c_name }}
+									</a>
+ 									<div class="line-item-mainmenu bg3-pattern"></div>
+ 									<div class="price-item-mainmenu txt22">
+										${{ course.price }}
+									</div>
+								</div>
+								<div class="flex-w flex-b m-b-3 details">
+										<!-- <p>Desc:Insert description here</p><span class="glyphicon glyphicon-remove cancel"></span> -->
+										<!-- <br> -->
+										<!-- <img src="/static/images/sliceofpizza150width.jpg" /> -->
+                                     <table>
+                                        <tr>
+                                            <th></th>
+                                            <th>The ingredients :</th>
+                                        </tr>
+                                        <tr>
+                                         <td>
+
+										<div class="pic-blo3 size20 bo-rad-10 hov-img-zoom m-r-28">
+											<a href="#"><img src="../static/images/custom/{{course.c_id|replace(' ','')}}.jpg" alt="IMG-MENU"></a>
+										</div>
+										<br />
+										<label for="select_{{ course.c_id }}">Amount:</label><select name="chooseamount" class="chooseamount" id="select_{{ course.c_id }}">
+												<option value="1" selected>1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+											</select>
+											<a class="btn btn-primary btn-sm additem">Add to Cart</a>
+                                        </td>
+                                        <td>
+                                            {% for  x in course.ingredients %}
+                                            {{ course.ingredients[loop.index0].i_name }}
+                                            <ul>
+                                                 {% for  y in course.ingredients[loop.index0].allergenes %}
+                                                <li>&#9888;{{y['a_name']}}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            <br>
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                    </table>
+
+								</div>
+								<span class="info-item-mainmenu txt23">
+									{{ course.info }}
+								</span>
+								
+							</div>
+						{% endfor %}
+					</div>
+					{% if loop.cycle('1', '2') == '2' %}
+				</div>
+				{%endif%}
+			{%endfor%}
+			</div>
+		</div>
+	</section>
+
+ 	{% for category,courses in alternateMenu.items() %}
+	<section class="section-{{category|lower}} bgwhite">
+		<div class="header-{{category|lower}} parallax0 parallax100" style="background-image: url('../static/images/custom/{{category}}.jpg');">
+			<div class="bg1-overlay t-center p-t-170 p-b-165">	
+				<h2 class="tit4 t-center">
+					{{category}}
+				</h2>
+			</div>
+		</div>
+ 		<div class="container">
+			<div class="row p-t-108 p-b-70">
+				{% for course in courses %}
+				{% if loop.cycle('1', '2','3') == '1' %}
+				<div class="col-md-8 col-lg-6 m-l-r-auto">
+				{%endif%}
+					<!-- Block3 -->
+					<div class="blo3 flex-w flex-col-l-sm m-b-30">
+						<div class="pic-blo3 size20 bo-rad-10 hov-img-zoom m-r-28">
+							<a href="#"><img src="../static/images/custom/{{course.c_id|replace(' ','')}}.jpg" alt="IMG-MENU"></a>
+						</div>
+ 						<div class="text-blo3 size21 flex-col-l-m">
+							<a href="#" class="txt21 m-b-3">
+								{{ course.c_name }}
+							</a>
+ 							<span class="txt23">
+								{{ course.info }}
+							</span>
+ 							<span class="txt22 m-t-20">
+								${{ course.price }}
+							</span>
+						</div>
+					</div>		
+					{% if loop.cycle('1', '2','3') == '3' %}
+				</div>
+				{%endif%}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{%endfor%}
+    <div id="shoppingcart">
+            <div id="shoppingitems">
+
+            </div>
+            <div id="total">
+                <div id="totaltext">Total:</div>
+                <div id="totalvalue"></div>
+            </div>
+            <br />
+        <button class="btn btn btn-success " id="purchasebutton">Purchase</button>
+    </div>
+        <div class="blockpage">
+            <div id="editpage">
+                <div id="editoptions">
+
+                </div>
+                {#   for selcourse in selectioncategories #}
+                    <!--<div class="selcategory">
+                        {#  #}  selcourse["sc_name"] %}
+                    </div>-->
+                {# endfor #}
+                <button class="btn btn-secondary" id="addeditedbutton">Edit</button>
+                <button class="btn btn-secondary " id="editcancelbutton">Cancel</button>
+            </div>
+        </div>
+ {% include "footer.html"%}
+{% endblock %}
+</html>
