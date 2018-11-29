@@ -20,7 +20,7 @@ insert_queries = {
 
     "insert_selection_category": "INSERT INTO selection_category (sc_name) VALUES ('{sc_name}')",
 
-    "insert_selection": "INSERT INTO selection (s_name, sc_id, i_id, s_price) VALUES ('{s_name}', '{sc_id}', '{i_id}', '{s_price}')",
+    "insert_selection": "INSERT INTO selection (s_name, sc_id, i_id, s_price) VALUES ('{s_name}', {sc_id}, {i_id}, {s_price})",
 
     "insert_course_selection": "INSERT INTO course_selection (c_id, s_id) VALUES ({c_id}, {s_id})",
 
@@ -135,8 +135,15 @@ def insert_selection_category(db, sc_name):
 def insert_selection(db, s_name, sc_id, i_id, s_price):
     cur = db.cursor()
     try:
-        if s_name == None or sc_id == None:
+        if s_name == None or sc_id == None or i_id == None or s_price == None:
             return EMPTY_INPUT_EXCEPTION
+
+        if s_price != "NULL":
+            try:
+                float(s_price)
+            except:
+                return INVALID_DECIMAL_VALUE
+
         cur.execute(insert_queries["insert_selection"].replace("{s_name}", s_name).replace("{sc_id}", str(sc_id)).replace("{i_id}", str(i_id)).replace("{s_price}", str(s_price)))
         db.commit()
     except (IntegrityError) as err:
@@ -146,9 +153,10 @@ def insert_selection(db, s_name, sc_id, i_id, s_price):
     except (DataError):
         return INPUT_TOO_LONG_EXCEPTION
     except (Error) as err:
+        if 'Unknown column' in str(err):
+            return INVALID_TYPE_EXCEPTION
         if 'Incorrect decimal value' in str(err):
             return INVALID_DECIMAL_VALUE
-        
         if 'Incorrect integer value' in str(err):
             return INVALID_TYPE_EXCEPTION
         raise err
