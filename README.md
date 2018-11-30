@@ -52,4 +52,7 @@ The menu webpage is built with the Flask framework in Python, HTML-templating wi
 ### Prerequisites
 Since this page dosen't support docker, you need to install Python, Mysql and MySQL server. 
 
+## Testing
+Tests are located in the separate test folder. Add the test file, `exceptions.py` and `test_database.py` in the same folder as the database functions you want to test. Use the `pytest` library. The tests require a database manager or image to run on your system, since the `test_database.py` file creates a dummy database using MySQL commands. The tests will automatically remove this database when complete. MySQL username and password must be changed in the database function file to work with your database manager. 
+
 
